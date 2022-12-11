@@ -5,10 +5,23 @@ use axum::{
     Json, Router,
 };
 use serde::{Deserialize, Serialize};
-use std::net::SocketAddr;
+use std::{env, net::SocketAddr, str::FromStr};
 
 #[tokio::main]
 async fn main() {
+    dotenv::dotenv().ok();
+    let db_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set in .env file");
+    let host = match env::var("HOST")
+        .expect("HOST is not set in .env file")
+        .to_lowercase()
+        .as_str() 
+    {
+        "localhost" => String::from("127.0.0.1"),
+        x => x.to_string()
+    };
+    let port = env::var("PORT").expect("PORT is not set in .env file");
+    let server_url = format!("{}:{}", host, port);
+
     // initialize tracing
     tracing_subscriber::fmt::init();
 
@@ -21,7 +34,7 @@ async fn main() {
 
     // run our app with hyper
     // `axum::Server` is a re-export of `hyper::Server`
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    let addr = SocketAddr::from_str(&server_url).unwrap();
     tracing::debug!("listening on {}", addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
