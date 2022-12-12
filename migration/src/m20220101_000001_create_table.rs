@@ -12,17 +12,13 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(Post::Table)
+                    .table(User::Table)
                     .if_not_exists()
-                    .col(
-                        ColumnDef::new(Post::Id)
-                            .integer()
-                            .not_null()
-                            .auto_increment()
-                            .primary_key(),
-                    )
-                    .col(ColumnDef::new(Post::Title).string().not_null())
-                    .col(ColumnDef::new(Post::Text).string().not_null())
+                    .col(ColumnDef::new(User::Id).integer().not_null().auto_increment().primary_key())
+                    .col(ColumnDef::new(User::Pseudo).string().not_null())
+                    .col(ColumnDef::new(User::About).string().not_null())
+                    .col(ColumnDef::new(User::InscriptionDate).date().not_null())
+                    .col(ColumnDef::new(User::InscriptionDate).date().not_null())
                     .to_owned(),
             )
             .await
@@ -46,3 +42,15 @@ enum Post {
     Title,
     Text,
 }
+
+#[derive(Iden)]
+enum User {
+    Table,
+    Id,
+    Pseudo,
+    About,
+    InscriptionDate,
+    LastConnectionDate,
+    HashedPassword
+}
+
