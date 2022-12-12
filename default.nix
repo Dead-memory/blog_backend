@@ -5,6 +5,7 @@ pkgs.mkShell {
   name="blog_backend";
   buildInputs = with pkgs; [
     cargo rustup
-    diesel-cli
+    openssl
+    pkg-config
   ];
 }

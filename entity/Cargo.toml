@@ -1,12 +1,11 @@
 [package]
-name = "blog_backend"
+name = "entity"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[workspace]
-members = [".", "api", "core", "entity", "migration"]
+serde = { version = "1", features = ["derive"] }
 
-[dependencies]
-blog-backend-api = { path = "api" }
+[dependencies.sea-orm]
+version = "^0.10.3" # sea-orm version 
