@@ -17,16 +17,16 @@ pub enum Relation {
         belongs_to = "super::article::Entity",
         from = "Column::ArticleId",
         to = "super::article::Column::Id",
-        on_update = "NoAction",
-        on_delete = "NoAction"
+        on_update = "Restrict",
+        on_delete = "Restrict"
     )]
     Article,
     #[sea_orm(
         belongs_to = "super::tag::Entity",
         from = "Column::TagId",
         to = "super::tag::Column::Id",
-        on_update = "NoAction",
-        on_delete = "NoAction"
+        on_update = "Restrict",
+        on_delete = "Restrict"
     )]
     Tag,
 }

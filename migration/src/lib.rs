@@ -7,6 +7,7 @@ mod m20221213_000004_add_article_table;
 mod m20221213_000005_add_tag_table;
 mod m20221213_000006_add_comment_table;
 mod m20221213_000007_add_session_table;
+mod m20221213_000008_add_creation_and_edition_row_into_article_table;
 
 pub struct Migrator;
 
@@ -20,7 +21,8 @@ impl MigratorTrait for Migrator {
             Box::new(m20221213_000004_add_article_table::Migration),
             Box::new(m20221213_000005_add_tag_table::Migration),
             Box::new(m20221213_000006_add_comment_table::Migration),
-            Box::new(m20221213_000007_add_session_table::Migration)
+            Box::new(m20221213_000007_add_session_table::Migration),
+            Box::new(m20221213_000008_add_creation_and_edition_row_into_article_table::Migration)
         ]
     }
 }

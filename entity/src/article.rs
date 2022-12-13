@@ -10,6 +10,8 @@ pub struct Model {
     pub user_id: i32,
     pub title: String,
     pub content: String,
+    pub creation_date: Date,
+    pub edition_date: Date,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -20,8 +22,8 @@ pub enum Relation {
         belongs_to = "super::user::Entity",
         from = "Column::UserId",
         to = "super::user::Column::Id",
-        on_update = "NoAction",
-        on_delete = "NoAction"
+        on_update = "Restrict",
+        on_delete = "Restrict"
     )]
     User,
 }

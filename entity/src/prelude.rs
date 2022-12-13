@@ -4,6 +4,7 @@ pub use super::article::Entity as Article;
 pub use super::comment::Entity as Comment;
 pub use super::role::Entity as Role;
 pub use super::roles_users::Entity as RolesUsers;
+pub use super::session::Entity as Session;
 pub use super::tag::Entity as Tag;
 pub use super::tags_articles::Entity as TagsArticles;
 pub use super::user::Entity as User;
