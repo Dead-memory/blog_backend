@@ -20,12 +20,12 @@ impl MigrationTrait for Migration {
                 .col(ColumnDef::new(Comment::ModifyDate).date().not_null())
                 .foreign_key(
                     ForeignKey::create()
-                        .name("fk-roles-users-role")
+                        .name("fk-comment-article")
                         .from(Comment::Table, Comment::ArticleId)
                         .to(Article::Table, Article::Id)
                 ).foreign_key(
                     ForeignKey::create()
-                        .name("fk-roles-users-user")
+                        .name("fk-comment-user")
                         .from(Comment::Table, Comment::UserId)
                         .to(User::Table, User::Id)
                 )

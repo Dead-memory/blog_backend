@@ -6,6 +6,7 @@ mod m20221213_000003_add_roles_table;
 mod m20221213_000004_add_article_table;
 mod m20221213_000005_add_tag_table;
 mod m20221213_000006_add_comment_table;
+mod m20221213_000007_add_session_table;
 
 pub struct Migrator;
 
@@ -18,7 +19,8 @@ impl MigratorTrait for Migrator {
             Box::new(m20221213_000003_add_roles_table::Migration),
             Box::new(m20221213_000004_add_article_table::Migration),
             Box::new(m20221213_000005_add_tag_table::Migration),
-            Box::new(m20221213_000006_add_comment_table::Migration)
+            Box::new(m20221213_000006_add_comment_table::Migration),
+            Box::new(m20221213_000007_add_session_table::Migration)
         ]
     }
 }

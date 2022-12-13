@@ -27,12 +27,12 @@ impl MigrationTrait for Migration {
                 .primary_key(Index::create().col(TagsArticles::TagId).col(TagsArticles::ArticleId))
                 .foreign_key(
                     ForeignKey::create()
-                        .name("fk-roles-users-role")
+                        .name("fk-tags-articles-tag")
                         .from(TagsArticles::Table, TagsArticles::TagId)
                         .to(Tag::Table, Tag::Id)
                 ).foreign_key(
                     ForeignKey::create()
-                        .name("fk-roles-users-user")
+                        .name("fk-tags-articles-article")
                         .from(TagsArticles::Table, TagsArticles::ArticleId)
                         .to(Article::Table, Article::Id)
                 )
