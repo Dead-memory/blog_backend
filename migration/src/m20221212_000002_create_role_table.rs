@@ -25,6 +25,17 @@ impl MigrationTrait for Migration {
                 .col(ColumnDef::new(RolesUsers::RoleId).integer().not_null())
                 .col(ColumnDef::new(RolesUsers::UserId).integer().not_null())
                 .primary_key(Index::create().col(RolesUsers::RoleId).col(RolesUsers::UserId))
+                .foreign_key(
+                    ForeignKey::create()
+                        .name("fk-roles-users-role")
+                        .from(RolesUsers::Table, RolesUsers::RoleId)
+                        .to(Role::Table, Role::Id)
+                ).foreign_key(
+                    ForeignKey::create()
+                        .name("fk-roles-users-user")
+                        .from(RolesUsers::Table, RolesUsers::UserId)
+                        .to(User::Table, User::Id)
+                )
                 .to_owned()
         ).await
     }
