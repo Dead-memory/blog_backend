@@ -4,6 +4,11 @@ use axum::{
     response::IntoResponse,
     Json, Router,
 };
+use blog_backend_core::{
+    sea_orm::{Database, DatabaseConnection},
+    Mutation as MutationCore//, Query as QueryCore
+};
+use migration::{Migrator, MigratorTrait};
 use serde::{Deserialize, Serialize};
 use std::{env, net::SocketAddr, str::FromStr};
 use dotenvy::dotenv;
@@ -18,7 +23,11 @@ pub fn main() {
 
 #[tokio::main]
 async fn start() -> anyhow::Result<()> {
+    // initialize tracing
+    tracing_subscriber::fmt::init();
+
     dotenv().ok();
+
     let db_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set in .env file");
     let host = match env::var("HOST")
         .expect("HOST is not set in .env file")
@@ -31,8 +40,9 @@ async fn start() -> anyhow::Result<()> {
     let port = env::var("PORT").expect("PORT is not set in .env file");
     let server_url = format!("{}:{}", host, port);
 
-    // initialize tracing
-    tracing_subscriber::fmt::init();
+    let db_conn = Database::connect(db_url)
+        .await.expect("Database conneciton failed");
+    Migrator::up(&db_conn, None).await.unwrap();
 
     // build our application with a route
     let app = Router::new()

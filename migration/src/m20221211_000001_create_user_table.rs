@@ -14,7 +14,8 @@ impl MigrationTrait for Migration {
                 .col(ColumnDef::new(User::Pseudo).string().not_null())
                 .col(ColumnDef::new(User::About).string().not_null())
                 .col(ColumnDef::new(User::InscriptionDate).date().not_null())
-                .col(ColumnDef::new(User::InscriptionDate).date().not_null())
+                .col(ColumnDef::new(User::LastConnectionDate).date().not_null())
+                .col(ColumnDef::new(User::HashedPassword).string().not_null())
                 .to_owned(),
             )
             .await
