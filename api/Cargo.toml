@@ -13,6 +13,7 @@ anyhow = "1.0.66"
 sea-orm = { version = "0.10", features = [ "sqlx-mysql", "sqlx-sqlite", "runtime-async-std-native-tls", "macros" ] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.68"
+tower-cookies = "0.8"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 dotenvy = "0.15"
