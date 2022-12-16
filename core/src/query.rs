@@ -48,4 +48,12 @@ impl Query {
             Option::None => Result::Ok(Option::None)
         }
     }
+
+    // -=Articles=-
+    pub async fn find_article_by_id(
+        db: &DbConn,
+        id: i32
+    ) -> Result<Option<article::Model>, DbErr> {
+        article::Entity::find_by_id(id).one(db).await
+    }
 }

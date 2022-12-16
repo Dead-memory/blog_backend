@@ -25,7 +25,7 @@ pub fn main() {
     }
 }
 
-const API_URL: &'static str = "api/v1_dev";
+const API_URL: &'static str = "/api/v1_dev";
 
 #[derive(Clone)]
 struct AppState {
@@ -61,10 +61,11 @@ async fn start() -> anyhow::Result<()> {
 
     // build our application with a route
     let app = Router::new()
-        .route("/user/:id", get(get_user))
-        .route("/auth/login", post(login))
-        .route("/auth/logout", get(logout))
-        .route("/test", get(test_fn))
+        .route(format!("{}{}", API_URL, "/user/:id").as_str(), get(get_user))
+        .route(format!("{}{}", API_URL, "/auth/login").as_str(), post(login))
+        .route(format!("{}{}", API_URL, "/auth/logout").as_str(), get(logout))
+        .route(format!("{}{}", API_URL, "/test").as_str(), get(test_fn))
+        .route(format!("{}{}", API_URL, "/article").as_str(), get(get_article))
         .with_state(state)
         .layer(CookieManagerLayer::new());
 
@@ -135,7 +136,7 @@ async fn logout(
     cookies.remove(Cookie::new(COOKIE_TOKEN_NAME, ""));
 
     if let Result::Ok(x) = QueryCore::remove_session_by_token(&state.conn, token).await {
-        if (x.rows_affected >= 1) {
+        if x.rows_affected >= 1 {
             StatusCode::OK
         } else {
             StatusCode::UNPROCESSABLE_ENTITY
@@ -148,15 +149,23 @@ async fn logout(
 async fn token_verify(
     db: &DbConn,
     cookies: Cookies
-) -> Option<entity::user::Model> {
-    QueryCore::find_user_by_token(
-        &db, 
-        &cookies
-            .get(COOKIE_TOKEN_NAME)
-            .unwrap()
-            .value()
-            .to_string()
-    ).await.unwrap()
+) -> Option <entity::user::Model> {
+    let token = &cookies
+        .get(COOKIE_TOKEN_NAME);
+
+    println!("{:?}", token);
+
+    match token {
+        Some(x) => {
+            QueryCore::find_user_by_token(
+                &db, 
+                &x
+                    .value()
+                    .to_string()
+            ).await.unwrap()
+        },
+        None => Option::None
+    }
 }
 
 async fn test_fn (
@@ -167,6 +176,36 @@ async fn test_fn (
         Option::Some(x) => format!("Vous êtes {}", x.pseudo),
         Option::None => "Not".to_string()
     }
+}
+
+// Articles
+mod serialization_struct;
+use serialization_struct::article::Article;
+use serialization_struct::tags::Tag;
+
+async fn get_article (
+    state: State<AppState>
+) -> String {
+    serde_json::to_string(&Article {
+        id: 1,
+   
+        author_id: 1,
+        author_pseudo: "Dofe".to_string(),
+    
+        title: "Safety".to_string(),
+        content: "?".to_string(),
+    
+        creation_date: "20221216".to_string(),
+        tags: vec![
+            Tag {
+                id: 1,
+
+                name: "Rust".to_string(),
+                description: "Programming language".to_string()
+            }
+        ],
+        picture_url: "https://media.istockphoto.com/id/1413025608/fr/vectoriel/premier-signe-de-s%C3%A9curit%C3%A9-jaune-signe-de-style-isol%C3%A9-sur-fond-blanc-illustration.jpg?s=612x612&w=0&k=20&c=IPhgHvg06Mq2_mz53uUjpmvJ-f1KgD58lqzJZkzzfhk=".to_string()
+    }).unwrap()
 }
 
 /*
