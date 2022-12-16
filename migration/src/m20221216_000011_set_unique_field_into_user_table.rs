@@ -1,6 +1,6 @@
 use sea_orm_migration::prelude::*;
 
-use super::m20221211_000001_create_user_table::Article;
+use super::m20221211_000001_create_user_table::User;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -14,7 +14,7 @@ impl MigrationTrait for Migration {
         
         manager.alter_table(
             sea_query::Table::alter()
-                .table()
+                .table(User::Table)
                 .modify_column(ColumnDef::new(User::Pseudo)
                     .string()
                     .not_null()
@@ -27,8 +27,8 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager.alter_table(
             sea_query::Table::alter()
-                .table(Article::Table)
-                .modify_column(ColumnDef::new(Alias::new("title"))
+                .table(User::Table)
+                .modify_column(ColumnDef::new(User::Pseudo)
                     .string()
                     .not_null()
                 )
